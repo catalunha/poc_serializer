@@ -59,22 +59,28 @@ from api.serializers import CommentSerializer
 data1 = {"email": "a@gmail.com", "content": "bb", "created": datetime.now()}
 
 s1 = CommentSerializer(data=data1)
-if s1.is_valid():
-    print("data1 is valid. criar instancia")
-    c1 = s1.save()
-    print(c1)
-    data1a = {"content": "cc"}
-    s1a = CommentSerializer(c1, data=data1a, partial=True)
-    if s1a.is_valid():
-        print(s1a.validated_data)
-        print(s1a.validated_data["content"])
-        c1a = s1a.save()
-        print(c1a)
-    else:
-        print("update invalid")
+print(repr(s1))
+# if s1.is_valid():
+#     print("=1=>", s1.data)
+#     print("data1 is valid. criar instancia")
+#     c1 = s1.save()
+#     print(c1)
+#     data1a = {"content": "cc"}
+#     s1a = CommentSerializer(c1, data=data1a, partial=True)
+#     if s1a.is_valid():
+#         print(s1a.validated_data)
+#         print(s1a.validated_data["content"])
+#         c1a = s1a.save()
+#         print(c1a)
+#     else:
+#         print("update invalid")
 
-else:
-    print("data1 is not valid. erros")
-    print(s1.errors)
+# else:
+#     print("data1 is not valid. erros")
+#     print(s1.errors)
 
 # --- exemplo3
+
+# +++ exemplo4
+
+# --- exemplo4

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .objects import Comment
+from .models import AlbumModel, TrackModel
 
 
 def validatorExample(value):
@@ -38,3 +39,54 @@ class CommentSerializer(serializers.Serializer):
                     "MyError email e content devem ser diferentes", "002"
                 )
         return super().validate(data)
+
+
+class TrackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrackModel
+        fields = [
+            "order",
+            "title",
+            "duration",
+        ]
+
+
+class AlbumSerializer(serializers.ModelSerializer):
+    # tracks = serializers.StringRelatedField(many=True)
+    # tracks = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    # tracks = serializers.HyperlinkedRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     view_name="track-model-detail",
+    # nao funciona pois precisa do context
+    # )
+    # tracks = serializers.SlugRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     slug_field="pk",
+    # )
+    tracks = TrackSerializer(
+        many=True,
+        # read_only=True,
+    )
+
+    class Meta:
+        model = AlbumModel
+        fields = [
+            "name",
+            "artist",
+            "tracks",
+        ]
+
+    def create(self, validated_data):
+        print("create em AlbumSerializer 1")
+        print(validated_data)
+        print("create em AlbumSerializer 1a")
+        tracks_data = validated_data.pop("tracks")
+        print("create em AlbumSerializer 2")
+        album = AlbumModel.objects.create(**validated_data)
+        print("create em AlbumSerializer 3")
+        for track_data in tracks_data:
+            TrackModel.objects.create(album=album, **track_data)
+        print("create em AlbumSerializer 4")
+        return album
